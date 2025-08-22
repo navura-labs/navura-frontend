@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      HUSKY: 0
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Setup pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4.1.0
+        with:
+          run_install: true
+
+      # Step 3: Setup Node.js environment
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      # Step 4: Run Lint
+      - name: Run Lint
+        run: pnpm lint
+
+      # Step 5: Build Project
+      - name: Build Project
+        run: pnpm build
+
+      # Step 6: Run Semantic Release
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: pnpm dlx semantic-release
