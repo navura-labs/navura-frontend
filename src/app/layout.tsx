@@ -1,8 +1,10 @@
-import "./globals.css";
+import "../styles/globals.css";
 
 import type { Metadata } from "next";
 // eslint-disable-next-line camelcase
 import { Geist, Geist_Mono } from "next/font/google";
+
+import { GlobalProviders } from "@/contexts/global-providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,11 +27,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <GlobalProviders>{children}</GlobalProviders>
       </body>
     </html>
   );

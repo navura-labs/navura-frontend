@@ -31,6 +31,7 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
       "commitlint.config.ts",
+      "src/components/ui/**",
     ],
   },
   ...compat.config({
